@@ -1,3 +1,10 @@
+/*
+ * @Author: David Kelly 
+ * @Date: 2017-11-23 15:43:26 
+ * @Last Modified by:   david 
+ * @Last Modified time: 2017-11-23 15:43:26 
+ */
+
 function validate(input) {
     
     let inputValue = document.getElementById(input).value;
