@@ -45,7 +45,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             mysqli_stmt_store_result($stmt);
             
             if(mysqli_stmt_num_rows($stmt) == 1){
-                $username_err = "Username registered. Re-enter or <a href='login.html'>login</a>.";
+                $username_err = "Username registered. Re-enter or <a href='login.php'>login</a>.";
             } 
 
         } else{
@@ -82,7 +82,7 @@ if(empty($mypassword)){
            if(mysqli_stmt_execute($stmt)){
                // Redirect to welcome page
                session_start();
-               $_SESSION['username'] = $username;  
+               $_SESSION['username'] = $myusername;  
                header("location: welcome.php");
             } else{
                 echo "Something went wrong. Please try again later.";
@@ -110,7 +110,7 @@ if(empty($mypassword)){
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Secure App</a>
+        <a class="navbar-brand" href="#">SecureApp</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -122,7 +122,7 @@ if(empty($mypassword)){
                     <a class="nav-link" href="register.html">Register</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="login.html">Login</a>
+                    <a class="nav-link" href="login.php">Login</a>
                 </li>
             </ul>
 
@@ -161,7 +161,7 @@ if(empty($mypassword)){
                             </div>
                             <br>
                             <small>
-                                <a href="login.html">Already registered?</a>
+                                <a href="login.php">Already registered?</a>
                             </small>
                             <button type="submit" id="submit" class="btn btn-primary btn-sm float-right" disabled="true"><i class="fa fa-sign-in" aria-hidden="true"></i> Submit</button>
                         </form>
