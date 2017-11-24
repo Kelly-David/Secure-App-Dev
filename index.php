@@ -4,7 +4,27 @@
  * @Last Modified by:   david 
  * @Last Modified time: 2017-11-23 15:43:44 
 -->
+<?php
+include("config.php");
+include("utility.php");
+session_start();
 
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+   // username and password sent from form 
+   
+   $myusername = mysqli_real_escape_string($link,$_POST['username']);
+   $mypassword = mysqli_real_escape_string($link,$_POST['password']); 
+
+   debug_to_console( $myusername );
+   debug_to_console( $mypassword );
+   
+   $sql = "INSERT INTO `user`(`username`, `passcode`, `state`) VALUES ($myusername, $mypassword, 1) ";
+   $stmt = mysqli_prepare($link, $sql);
+   
+   mysqli_stmt_execute($stmt);
+}
+?>
 <!DOCTYPE html>
 <html>
 
@@ -42,15 +62,15 @@
                 <div class="card">
                     <div class="card-header">Register</div>
                     <div class="card-body">
-                        <form action="register.php" method="POST">
+                        <form action="" method="post">
                             <div class="form-group">
                                 <label for="username">Username</label>
-                                <input type="text" class="form-control form-control-sm" id="username" placeholder="Enter username" onkeyup="validate('username');">
+                                <input type="text" class="form-control form-control-sm" id="username" name="username" placeholder="Enter username" onkeyup="validate('username');">
                                 <small id="usernameAlert" class="form-text text-muted float-right"></small>
                             </div>
                             <div class="form-group">
                                 <label for="password">Password</label>
-                                <input type="password" class="form-control form-control-sm" id="password" placeholder="Enter a password" onkeyup="validate('password');">
+                                <input type="password" class="form-control form-control-sm" id="password" name="password" placeholder="Enter a password" onkeyup="validate('password');">
                                 <small id="passwordAlert" class="form-text text-muted float-right"></small>
                             </div>
                             <br>
@@ -72,5 +92,4 @@
             <script src="validate.js"></script>
     </div>
 </body>
-
 </html>
