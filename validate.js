@@ -2,7 +2,7 @@
  * @Author: David Kelly 
  * @Date: 2017-11-23 15:43:26 
  * @Last Modified by: david
- * @Last Modified time: 2017-11-23 15:49:37
+ * @Last Modified time: 2017-11-24 13:15:41
  */
 
  // validate(string)
@@ -14,8 +14,11 @@ function validate(input) {
     let errorStyle = "border-left: 4px solid red";
     let passStyle = "border-left: 4px solid green";
     let valid = false;
+    let specialChars = false;
 
-    if (inputValue.length < 6) {
+    specialChars = specialCharacters(inputValue);
+
+    if ((inputValue.length < 6) || (specialChars==true)) {
         inputAlertString="Invalid "+input;
         inputDiv.style = errorStyle;       
     } else { 
@@ -36,7 +39,7 @@ function checkAllInputs() {
     let input = document.getElementsByTagName('input');
 
     for(i = 0; i < input.length; ++i) {
-        if (input[i].value.length < 6 ) {
+        if ((input[i].value.length < 6) || (specialCharacters(input[i].value)) ) {
             return false;
         }
     }
@@ -46,4 +49,12 @@ function checkAllInputs() {
 // toggleButtonState(boolean)
 function toggleButtonState(state) {
     document.getElementById('submit').disabled=state;
+}
+
+function specialCharacters(inputString) {
+    
+    if (/[`~,.<>;':"/[\]|{}()=_+-]/.test(inputString)){    
+        return true;
+    }
+
 }

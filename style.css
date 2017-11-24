@@ -1,12 +1,21 @@
 /*
  * @Author: David Kelly 
  * @Date: 2017-11-23 15:43:36 
- * @Last Modified by:   david 
- * @Last Modified time: 2017-11-23 15:43:36 
+ * @Last Modified by: david
+ * @Last Modified time: 2017-11-24 13:28:18
  */
- 
+
 body {
     background-color: whitesmoke
+}
+
+.card a {
+    color: #0ca891 !important
+}
+
+.card button {
+    background: #0ca891 !important;
+    border: 1px solid #0ca891 !important;
 }
 
 form label {
