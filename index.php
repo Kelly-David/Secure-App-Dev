@@ -5,22 +5,68 @@
  * @Last Modified time: 2017-11-23 15:43:44 
 -->
 <?php
-include("config.php");
-include("utility.php");
+require_once("config.php");
+require_once("utility.php");
 session_start();
 
+// Initialize variables
+$username = $password = "";
+$username_err = $password_err = "";
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
    // username and password sent from form 
    
-   $myusername = mysqli_real_escape_string($link,$_POST['username']);
+   $myusername = strtoupper(mysqli_real_escape_string($link,$_POST['username']));
    $mypassword = mysqli_real_escape_string($link,$_POST['password']); 
 
    debug_to_console( $myusername );
    debug_to_console( $mypassword );
-   
 
-   if($myusername && $mypassword) {
+   // Validate username
+   if(empty($myusername)) {
+
+    $username_err = "Username error - please enter a valid username.";
+
+    } else {
+
+    // Prepare a select statement
+    $sql = "SELECT id FROM user WHERE username = ?";
+    
+    if($stmt = mysqli_prepare($link, $sql)){
+        // Bind variables to the prepared statement as parameters
+        mysqli_stmt_bind_param($stmt, "s", $param_username);
+        
+        // Set parameters
+        $param_username = $myusername;
+        
+        // Attempt to execute the prepared statement
+        if(mysqli_stmt_execute($stmt)){
+            /* store result */
+            mysqli_stmt_store_result($stmt);
+            
+            if(mysqli_stmt_num_rows($stmt) == 1){
+                $username_err = "Username registered. Re-enter or <a href='login.html'>login</a>.";
+            } 
+
+        } else{
+            echo "Oops! Something went wrong. Please try again later.";
+        }
+    }
+    // Close statement
+    mysqli_stmt_close($stmt);
+}
+
+// Validate password
+if(empty($mypassword)){
+    // No password
+    $password_err = "Please enter a password.";  
+} elseif(strlen($mypassword) < 6) {
+    // Password length error
+    $password_err = "Password must have atleast 6 characters.";
+}
+   
+    // Check input errors before inserting in database
+    if(empty($username_err) && empty($password_err)){
        // Prepare an insert statement
        $sql = "INSERT INTO user (username, passcode, state) VALUES (?, ?, ?)";
        
@@ -29,7 +75,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
            mysqli_stmt_bind_param($stmt, "sss", $param_username, $param_password, $param_state );
            // Set parameters
            $param_username = $myusername;
-           $param_password = $mypassword;
+           $param_password = password_hash($mypassword, PASSWORD_DEFAULT);
            $param_state = 1;
            
            // Attempt to execute the prepared statement
@@ -97,18 +143,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                             <span>
                     </div>
                     <div class="card-body">
-                        <form action="" method="post">
+                        <form action="" method="post" autocomplete="off" >
                             <div class="form-group">
                                 <label for="username">Username</label>
                                 <input type="text" class="form-control form-control-sm" id="username" name="username" placeholder="Enter username" onkeyup="validate('username');">
-                                <small id="usernameAlert" class="form-text text-muted float-right"></small>
+                                <small id="usernameAlert" class="form-text text-muted float-right"><?php echo $username_err; ?></small>
                             </div>
                             <div class="form-group">
                                 <label for="password">Password</label>
                                 <input type="password" class="form-control form-control-sm" id="password" name="password" placeholder="Enter a password"
                                     onkeyup="validate('password');">
                                 <span>
-                                    <small id="passwordAlert" class="form-text text-muted float-right"></small>
+                                    <small id="passwordAlert" class="form-text text-muted float-right"><?php echo $password_err; ?></small>
                                 </span>
                             </div>
                             <br>
