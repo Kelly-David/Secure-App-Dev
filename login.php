@@ -143,16 +143,13 @@ mysqli_close($link);
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php">Register</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="login.php">Login</a>
-                </li>
-            </ul>
-
-        </div>
+        <ul class="navbar-nav mr-auto">
+           <?php if(!$auth) { echo '<li class="nav-item"><a class="nav-link" href="index.php">Register</a></li>';}?>  
+           <?php if(!$auth) { echo '<li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>';}?> 
+           <?php if($auth) { echo '<li class="nav-item"><a class="nav-link" href="welcome.php">Welcome</a></li>';}?>  
+           <?php if($auth) { echo '<li class="nav-item"><a class="nav-link" href="users.php">Users</a></li>';}?>  
+        </ul>
+    </div>
     </nav>
     <div class="container-fluid">
         <div class="row" style="margin: 1rem 0 0 0">

@@ -1,10 +1,10 @@
-<!--
- * @Author: David Kelly 
- * @Date: 2017-11-24 20:41:01 
- * @Last Modified by:   david 
- * @Last Modified time: 2017-11-24 20:41:01 
- */-->
 <?php
+/*
+ * @Author: David Kelly 
+ * @Date: 2017-11-25 11:50:26 
+ * @Last Modified by: david
+ * @Last Modified time: 2017-11-25 12:13:34
+ */
 require_once("config.php");
 require_once("utility.php");
 // Initialize the session
@@ -18,62 +18,7 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
     $myusername = $_SESSION['username'];
     $auth = true;
 }
-
-// Initialize variables
-$mypassword = $mypassword_confirm = "";
-$mypassword_err = $mypassword_confirm_err = "";
-
-if($_SERVER["REQUEST_METHOD"] == "POST") {
-   // password and password_confirm sent from form 
-   $mypassword = mysqli_real_escape_string($link,$_POST['password']);
-   $mypassword_confirm = mysqli_real_escape_string($link,$_POST['password_confirm']); 
-
-   // Validate password
-   if(empty($mypassword)){
-    // No password
-    $mypassword_err = "Password error - please enter a password.";  
-    } elseif(strlen($mypassword) < 6) {
-    // Password length error
-    $mypassword_err = "Password must have atleast 6 characters.";
-    }
-
-    // Validate password_confirm
-   if(empty($mypassword_confirm)){
-    // No password_confirm
-    $mypassword_confirm_err = "Password error - please enter a password.";  
-    } elseif(strlen($mypassword) < 6) {
-    // Password_confirm length error
-    $mypassword_confirm_err = "Password must have atleast 6 characters.";
-    }
-
-    // Validate match
-    if($mypassword != $mypassword_confirm) {
-        // Passwords do not match
-        $mypassword_err = "Passwords do not match";  
-        $mypassword_confirm_err = "Passwords do not match";  
-    }
-
-    if(empty($mypassword_err) && empty($mypassword_confirm_err)) {
-        // No errors
-        $updatepw = "UPDATE user SET passcode = ? WHERE username = ?";
-        if($stmt = mysqli_prepare($link, $updatepw)) {
-            mysqli_stmt_bind_param($stmt, "ss", $param_password, $param_username);
-
-            $param_password = password_hash($mypassword, PASSWORD_DEFAULT);            
-            $param_username = $myusername;
-
-            if(mysqli_stmt_execute($stmt)){
-
-            } else {
-                echo "Oops! Something went wrong. Please try again later.";                             
-            }
-        }    
-        // Redirect to logout  
-        header("location: logout.php");
-    }
-}
 ?>
-
  <!DOCTYPE html>
  <html>
  
@@ -93,14 +38,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
              <span class="navbar-toggler-icon"></span>
          </button>
  
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
+         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+             <ul class="navbar-nav mr-auto">
                 <?php if(!$auth) { echo '<li class="nav-item"><a class="nav-link" href="index.php">Register</a></li>';}?>  
                 <?php if(!$auth) { echo '<li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>';}?> 
                 <?php if($auth) { echo '<li class="nav-item"><a class="nav-link" href="welcome.php">Welcome</a></li>';}?>  
                 <?php if($auth) { echo '<li class="nav-item"><a class="nav-link" href="users.php">Users</a></li>';}?>  
-            </ul>
- 
+             </ul>
          </div>
      </nav>
      <div class="container-fluid">
