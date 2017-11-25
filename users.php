@@ -3,7 +3,7 @@
  * @Author: David Kelly 
  * @Date: 2017-11-25 11:50:26 
  * @Last Modified by: david
- * @Last Modified time: 2017-11-25 12:13:34
+ * @Last Modified time: 2017-11-25 13:47:42
  */
 require_once("config.php");
 require_once("utility.php");
@@ -27,26 +27,10 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
          crossorigin="anonymous">
      <link rel="stylesheet" href="style.css">
-     <title>Welcome</title>
+     <title>Users</title>
  </head>
  
  <body>
-     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-         <a class="navbar-brand" href="#">SecureApp</a>
-         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-             aria-expanded="false" aria-label="Toggle navigation">
-             <span class="navbar-toggler-icon"></span>
-         </button>
- 
-         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-             <ul class="navbar-nav mr-auto">
-                <?php if(!$auth) { echo '<li class="nav-item"><a class="nav-link" href="index.php">Register</a></li>';}?>  
-                <?php if(!$auth) { echo '<li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>';}?> 
-                <?php if($auth) { echo '<li class="nav-item"><a class="nav-link" href="welcome.php">Welcome</a></li>';}?>  
-                <?php if($auth) { echo '<li class="nav-item"><a class="nav-link" href="users.php">Users</a></li>';}?>  
-             </ul>
-         </div>
-     </nav>
      <div class="container-fluid">
          <div class="row" style="margin: 1rem 0 0 0">
              <div class="col-sm-3">
@@ -54,38 +38,53 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
              </div>
              <div class="col-sm-6">
                  <div class="card">
-                     <div class="card-header">Welcome
+                     <div class="card-header">
+                         Users
                          <span class="float-right">
-                             <small class="form-text text-muted">
-                                 <a href="" data-toggle="collapse" data-target="#demo"><i class="fa fa-key" aria-hidden="true"></i></a>&nbsp;&nbsp;
-                                 <a href="logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
-                             </small>
-                             <span>
+                         <small class="form-text text-muted">
+                             <a href="welcome.php"><i class="fa fa-home" aria-hidden="true"></i></a>&nbsp;&nbsp;
+                             <a href="users.php"><i class="fa fa-users" aria-hidden="true"></i></a>&nbsp;&nbsp;
+                             <a href="" data-toggle="collapse" data-target="#demo"><i class="fa fa-key" aria-hidden="true"></i></a>&nbsp;&nbsp;
+                             <a href="logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
+                         </small>
+                         <span>
                      </div>
                      <div class="card-body">
-                         <span class="text-info"><?php echo $myusername; ?></span><br>
-                         <small class="text-muted">Welcome to the app!</small>
+                            <?php
+                                // Attempt select query execution with order by clause
+                                $sql = "SELECT id, username FROM user ORDER BY username";
+                                $count = 1;
+                                if($result = mysqli_query($link, $sql)){
+                                    if(mysqli_num_rows($result) > 0){
+                                        echo "<table class='table'>";
+                                            echo "<thead>";
+                                            echo "<tr>";
+                                                echo "<th>#</th>";
+                                                echo "<th>Username</th>";
+                                            echo "</tr>";
+                                            echo "</thead>";
+                                        while($row = mysqli_fetch_array($result)){
+                                            echo "<tbody>";
+                                            echo "<tr>";
+                                                echo "<td>" . $count. "</td>";
+                                                echo "<td>" . $row['username'] . "</td>";
+                                            echo "</tr>";
+                                            echo "</tbody>";
+                                            $count+=1;
+                                        }
+                                        echo "</table>";
+                                        // Close result set
+                                        mysqli_free_result($result);
+                                    } else{
+                                        echo "No records matching your query were found.";
+                                    }
+                                } else{
+                                    echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
+                                }
+                            ?>
                      </div>
                      <div class="card-footer">
-                         <div id="demo" class="collapse<?php if($mypassword_err || $mypassword_confirm_err) {echo '.show';}?>">
-                                <form action="" method="post" autocomplete="off" >
-                                        <div class="form-group">
-                                            <label for="password">Current Password</label>
-                                            <input type="text" class="form-control form-control-sm" id="password" name="password" placeholder="Enter a password" onkeyup="validate('password');">
-                                            <small id="passwordAlert" class="form-text text-muted float-right"><?php echo $mypassword_err; ?></small>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="password">New Password</label>
-                                            <input type="password_confirm" class="form-control form-control-sm" id="password_confirm" name="password_confirm" placeholder="Re-enter password"
-                                                onkeyup="validate('password_confirm');">
-                                            <span>
-                                                <small id="password_confirmAlert" class="form-text text-muted float-right"><?php echo $mypassword_confirm_err; ?></small>
-                                            </span>
-                                        </div>
-                                        <br>
-                                        <button type="submit" id="submit" class="btn btn-primary btn-sm float-right" disabled="true"><i class="fa fa-sign-in" aria-hidden="true"></i> Submit</button>
-                                    </form>
-                         </div>
+                         <?php include("reset.php"); ?>
                      </div>
                  </div>
              </div>
