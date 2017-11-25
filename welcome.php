@@ -5,6 +5,8 @@
  * @Last Modified time: 2017-11-24 20:41:01 
  */-->
  <?php
+require_once("config.php");
+require_once("utility.php");
 // Initialize the session
 session_start();
  
@@ -14,6 +16,60 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
   exit;
 } else {
     $myusername = $_SESSION['username'];
+}
+
+// Initialize variables
+$mypassword = $mypassword_confirm = "";
+$mypassword_err = $mypassword_confirm_err = "";
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+   // password and password_confirm sent from form 
+   $mypassword = mysqli_real_escape_string($link,$_POST['password']);
+   $mypassword_confirm = mysqli_real_escape_string($link,$_POST['password_confirm']); 
+
+   // Validate password
+   if(empty($mypassword)){
+    // No password
+    $mypassword_err = "Password error - please enter a password.";  
+    } elseif(strlen($mypassword) < 6) {
+    // Password length error
+    $mypassword_err = "Password must have atleast 6 characters.";
+    }
+
+    // Validate password_confirm
+   if(empty($mypassword_confirm)){
+    // No password_confirm
+    $mypassword_confirm_err = "Password error - please enter a password.";  
+    } elseif(strlen($mypassword) < 6) {
+    // Password_confirm length error
+    $mypassword_confirm_err = "Password must have atleast 6 characters.";
+    }
+
+    // Validate match
+    if($mypassword != $mypassword_confirm) {
+        // Passwords do not match
+        $mypassword_err = "Passwords do not match";  
+        $mypassword_confirm_err = "Passwords do not match";  
+    }
+
+    if(empty($mypassword_err) && empty($mypassword_confirm_err)) {
+        // No errors
+        $updatepw = "UPDATE user SET passcode = ? WHERE username = ?";
+        if($stmt = mysqli_prepare($link, $updatepw)) {
+            mysqli_stmt_bind_param($stmt, "ss", $param_password, $param_username);
+
+            $param_password = password_hash($mypassword, PASSWORD_DEFAULT);            
+            $param_username = $myusername;
+
+            if(mysqli_stmt_execute($stmt)){
+
+            } else {
+                echo "Oops! Something went wrong. Please try again later.";                             
+            }
+        }    
+        // Redirect to logout  
+        header("location: logout.php");
+    }
 }
 ?>
 
@@ -68,21 +124,22 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
                          <small class="text-muted">Welcome to the app!</small>
                      </div>
                      <div class="card-footer">
-                         <div id="demo" class="collapse">
+                         <div id="demo" class="collapse<?php if($mypassword_err || $mypassword_confirm_err) {echo '.show';}?>">
                                 <form action="" method="post" autocomplete="off" >
                                         <div class="form-group">
-                                            <label for="currentpw">Current Password</label>
-                                            <input type="text" class="form-control form-control-sm" id="currentpw" name="currentpw" placeholder="Enter current password" onkeyup="validate('currentpw');">
-                                            <small id="currentpwAlert" class="form-text text-muted float-right"></small>
+                                            <label for="password">Current Password</label>
+                                            <input type="text" class="form-control form-control-sm" id="password" name="password" placeholder="Enter a password" onkeyup="validate('password');">
+                                            <small id="passwordAlert" class="form-text text-muted float-right"><?php echo $mypassword_err; ?></small>
                                         </div>
                                         <div class="form-group">
                                             <label for="password">New Password</label>
-                                            <input type="password" class="form-control form-control-sm" id="password" name="password" placeholder="Enter a new password"
-                                                onkeyup="validate('password');">
+                                            <input type="password_confirm" class="form-control form-control-sm" id="password_confirm" name="password_confirm" placeholder="Re-enter password"
+                                                onkeyup="validate('password_confirm');">
                                             <span>
-                                                <small id="passwordAlert" class="form-text text-muted float-right"></small>
+                                                <small id="password_confirmAlert" class="form-text text-muted float-right"><?php echo $mypassword_confirm_err; ?></small>
                                             </span>
                                         </div>
+                                        <br>
                                         <button type="submit" id="submit" class="btn btn-primary btn-sm float-right" disabled="true"><i class="fa fa-sign-in" aria-hidden="true"></i> Submit</button>
                                     </form>
                          </div>
