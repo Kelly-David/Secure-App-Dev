@@ -3,19 +3,19 @@
  * @Author: David Kelly 
  * @Date: 2017-11-24 21:08:35 
  * @Last Modified by: david
- * @Last Modified time: 2017-11-25 06:14:42
+ * @Last Modified time: 2017-11-27 14:29:03
  */
 
-// Initialize the session
 session_start();
- 
-// Unset all of the session variables
+if(isset($_COOKIE[session_name()])) {
+    setcookie(session_name(),'',time()-3600); # unset session id/cookies
+}
+unset($_SESSION['username']);
 $_SESSION = array();
- 
-// Destroy the session.
 session_destroy();
- 
-// Redirect to login page
+session_commit(); 
+
 header("location: login.php");
+
 exit;
 ?>

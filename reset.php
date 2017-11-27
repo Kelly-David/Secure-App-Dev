@@ -3,9 +3,14 @@
  * @Author: David Kelly 
  * @Date: 2017-11-25 13:40:24 
  * @Last Modified by: david
- * @Last Modified time: 2017-11-25 13:51:09
+ * @Last Modified time: 2017-11-27 14:02:17
  */
 
+// Protect partial from being viewed individually
+if(!$_SESSION) {
+      header("location: logout.php");
+      exit;
+}
  // Initialize variables
 $mypassword = $mypassword_confirm = "";
 $mypassword_err = $mypassword_confirm_err = "";

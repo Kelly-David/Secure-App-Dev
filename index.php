@@ -106,6 +106,7 @@ if(empty($mypassword)){
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
         crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
+    <script src="validate.js"></script> 
     <title>Register</title>
 </head>
 
@@ -163,7 +164,6 @@ if(empty($mypassword)){
         <script src="https://use.fontawesome.com/6e3dca925a.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
             crossorigin="anonymous"></script>
-        <script src="validate.js"></script>
     </div>
 </body>
 

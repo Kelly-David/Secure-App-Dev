@@ -2,8 +2,14 @@
  * @Author: David Kelly 
  * @Date: 2017-11-23 15:43:26 
  * @Last Modified by: david
- * @Last Modified time: 2017-11-24 13:15:41
+ * @Last Modified time: 2017-11-27 14:42:35
  */
+
+window.onpageshow = function(event) {
+    if (event.persisted) {
+        window.location.reload() 
+    }
+};
 
  // validate(string)
 function validate(input) {
@@ -26,7 +32,7 @@ function validate(input) {
         inputDiv.style = passStyle;
     }
 
-    valid = checkAllInputs();
+    valid = checkAllInputs(input);
     toggleButtonState(!valid); 
     valid = false; 
     document.getElementById(input+'Alert').innerHTML = inputAlertString;
@@ -34,12 +40,17 @@ function validate(input) {
 }
 
 // boolean checkAllInputs()
-function checkAllInputs() {
+function checkAllInputs(inputId) {
 
     let input = document.getElementsByTagName('input');
 
     for(i = 0; i < input.length; ++i) {
         if ((input[i].value.length < 6) || (specialCharacters(input[i].value)) ) {
+            if (inputId == "password_confirm") {
+                if (!matchPassword()) {
+                    return false;
+                }
+            }
             return false;
         }
     }
@@ -56,5 +67,12 @@ function specialCharacters(inputString) {
     if (/[`~,.<>;':"/[\]|{}()=_+-]/.test(inputString)){    
         return true;
     }
+}
 
+function matchPassword() {
+    pw = document.getElementById('password').value;
+    pwc = document.getElementById('password_confirm').value;
+    if (pw === pwc) {
+        return true;
+    } else { return false }
 }

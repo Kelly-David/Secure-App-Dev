@@ -3,13 +3,11 @@
  * @Author: David Kelly 
  * @Date: 2017-11-25 11:50:26 
  * @Last Modified by: david
- * @Last Modified time: 2017-11-25 13:47:42
+ * @Last Modified time: 2017-11-27 13:53:54
  */
 require_once("config.php");
 require_once("utility.php");
-// Initialize the session
 session_start();
- 
 // If session variable is not set it will redirect to login page
 if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
   header("location: login.php");
@@ -27,6 +25,7 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
          crossorigin="anonymous">
      <link rel="stylesheet" href="style.css">
+     <script src="validate.js"></script> 
      <title>Users</title>
  </head>
  
@@ -96,7 +95,6 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
          <script src="https://use.fontawesome.com/6e3dca925a.js"></script>
          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
              crossorigin="anonymous"></script>
-         <script src="validate.js"></script>
      </div>
  </body>
  
