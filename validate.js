@@ -2,18 +2,18 @@
  * @Author: David Kelly 
  * @Date: 2017-11-23 15:43:26 
  * @Last Modified by: david
- * @Last Modified time: 2017-11-27 14:42:35
+ * @Last Modified time: 2017-11-27 15:10:19
  */
 
-window.onpageshow = function(event) {
+window.onpageshow = function (event) {
     if (event.persisted) {
-        window.location.reload() 
+        window.location.reload()
     }
 };
 
- // validate(string)
+// validate(string)
 function validate(input) {
-    
+
     let inputValue = document.getElementById(input).value;
     let inputDiv = document.getElementById(input);
     let inputAlertString = "";
@@ -24,18 +24,18 @@ function validate(input) {
 
     specialChars = specialCharacters(inputValue);
 
-    if ((inputValue.length < 6) || (specialChars==true)) {
-        inputAlertString="Invalid "+input;
-        inputDiv.style = errorStyle;       
-    } else { 
-        inputAlertString="";
+    if ((inputValue.length < 6) || (specialChars == true)) {
+        inputAlertString = "Invalid " + input;
+        inputDiv.style = errorStyle;
+    } else {
+        inputAlertString = "";
         inputDiv.style = passStyle;
     }
 
     valid = checkAllInputs(input);
-    toggleButtonState(!valid); 
-    valid = false; 
-    document.getElementById(input+'Alert').innerHTML = inputAlertString;
+    toggleButtonState(!valid);
+    valid = false;
+    document.getElementById(input + 'Alert').innerHTML = inputAlertString;
 
 }
 
@@ -44,11 +44,18 @@ function checkAllInputs(inputId) {
 
     let input = document.getElementsByTagName('input');
 
-    for(i = 0; i < input.length; ++i) {
-        if ((input[i].value.length < 6) || (specialCharacters(input[i].value)) ) {
-            if (inputId == "password_confirm") {
+    for (i = 0; i < input.length; ++i) {
+        if ((input[i].value.length < 6) || (specialCharacters(input[i].value))) {
+            // Do passwords match
+            if (input.value == "password_confirm") {
                 if (!matchPassword()) {
                     return false;
+                }
+            }
+            // Is password complex
+            if (input.value == "password") {
+                if (!passwordStrength()) {
+                    return false
                 }
             }
             return false;
@@ -59,12 +66,12 @@ function checkAllInputs(inputId) {
 
 // toggleButtonState(boolean)
 function toggleButtonState(state) {
-    document.getElementById('submit').disabled=state;
+    document.getElementById('submit').disabled = state;
 }
 
 function specialCharacters(inputString) {
-    
-    if (/[`~,.<>;':"/[\]|{}()=_+-]/.test(inputString)){    
+
+    if (/[`~,.<>;':"/[\]|{}()=_+-]/.test(inputString)) {
         return true;
     }
 }
@@ -75,4 +82,14 @@ function matchPassword() {
     if (pw === pwc) {
         return true;
     } else { return false }
+}
+
+function passwordStrength() {
+    password = document.getElementById('password').value;
+    if (password.length < 6) { return false }
+    var hasUpperCase = /[A-Z]/.test(password);
+    var hasLowerCase = /[a-z]/.test(password);
+    var hasNumbers = /\d/.test(password);
+    if ( (hasUpperCase + hasLowerCase + hasNumbers) < 2) { return false }
+    return true;
 }
