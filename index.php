@@ -76,7 +76,11 @@ if(empty($mypassword)){
            mysqli_stmt_bind_param($stmt, "sss", $param_username, $param_password, $param_state );
            // Set parameters
            $param_username = $myusername;
-           $param_password = password_hash($mypassword, PASSWORD_DEFAULT);
+           $options = [
+            'cost' => 11,
+            'salt' => mcrypt_create_iv(22, MCRYPT_DEV_URANDOM),
+            ];
+           $param_password = password_hash($mypassword, PASSWORD_BCRYPT, $options);
            $param_state = 1;
            
            // Attempt to execute the prepared statement
