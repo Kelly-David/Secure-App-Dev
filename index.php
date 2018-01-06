@@ -64,8 +64,10 @@ if(empty($mypassword)){
     $password_err = "Please enter a password.";  
 } elseif(strlen($mypassword) < 6) {
     // Password length error
-    $password_err = "Password must have atleast 6 characters.";
-}
+    $password_err = "Password must have at least 6 characters.";
+} elseif(!preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/', $mypassword))
+    // Password format error
+    $password_err = "Password must be in the correct format.";
    
     // Check input errors before inserting in database
     if(empty($username_err) && empty($password_err)){
