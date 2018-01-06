@@ -2,7 +2,8 @@
  * @Author: David Kelly 
  * @Date: 2017-11-23 15:43:44 
  * @Last Modified by:   david 
- * @Last Modified time: 2017-11-23 15:43:44 
+ * @Last Modified time: 2017-11-23 15:43:44
+* @Description: User Login.
 -->
 <?php
 require_once("config.php");
@@ -37,12 +38,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     if(empty($mypassword)){
         // No password
         $password_err = "Password error -please enter a password.";  
-    } elseif(strlen($mypassword) < 6) {
-        // Password length error
-        $password_err = "Password must have atleast 6 characters.";
+    } elseif(!preg_match('/^[a-zA-Z0-9 .]+$/', $myusername) || (strlen($myusername) < 6)) {
+    
+        $username_err = "Username format error - please enter a valid username.";
+        
     }
    
-    // Check input errors before inserting in database
+    // Check input errors 
     if(empty($username_err) && empty($password_err)){
        // Prepare an insert statement
        $sql = "SELECT username, passcode, lastLogin, attempt FROM user WHERE username = ?";
@@ -174,7 +176,9 @@ mysqli_close($link);
                     </div>
                     <div class="card-footer">
                         <div id="demo" class="collapse">
-                            <small class="form-text text-muted">Minimum length is 6. Use alpha-numeric characters only. No symbols, punctuation or whitespace.</small>
+                            <small class="form-text text-muted">
+                                <b>Username</b><br> Minimum length is 6. Use alpha-numeric characters only. No symbols.<br><br>
+                                <b>Password</b><br> Minimum length is 6. Must contain at least: 1 uppercase char, 1 number. No symbols.</small>
                         </div>
                     </div>
                 </div>

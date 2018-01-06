@@ -2,7 +2,7 @@
  * @Author: David Kelly 
  * @Date: 2017-11-23 15:43:26 
  * @Last Modified by: david
- * @Last Modified time: 2018-01-06 12:16:24
+ * @Last Modified time: 2018-01-06 13:59:39
  */
 
 /**
@@ -18,7 +18,7 @@ window.onpageshow = function (event) {
 /**
  * @function validate():void 
  * @param {string} input 
- * @description Validates form input data
+ * @description Validates form input data, toggles alert string and css styles
  */
 function validate(input) {
     let inputValue = document.getElementById(input).value;

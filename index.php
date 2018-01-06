@@ -3,7 +3,7 @@
  * @Date: 2017-11-23 15:43:44 
  * @Last Modified by:   david 
  * @Last Modified time: 2017-11-23 15:43:44 
- * @Description: User Registration. User enters emails and password to create an account.
+ * @Description: User Registration. User enters username and password to create an account.
 -->
 <?php
 require_once("config.php");
@@ -21,6 +21,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
    $myusername = strtoupper(mysqli_real_escape_string($link,$_POST['username']));
    $mypassword = mysqli_real_escape_string($link,$_POST['password']); 
 
+   // Testing
    debug_to_console( $myusername );
    debug_to_console( $mypassword );
 
@@ -29,7 +30,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $username_err = "Username error - please enter a valid username.";
 
-    } elseif(!preg_match('/^[a-zA-Z]\w{6,}$/', $myusername)) {
+    } elseif(!preg_match('/^[a-zA-Z0-9 .]+$/', $myusername) || (strlen($myusername) < 6)) {
     
         $username_err = "Username format error - please enter a valid username.";
         
