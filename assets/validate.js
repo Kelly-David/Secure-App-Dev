@@ -2,7 +2,7 @@
  * @Author: David Kelly 
  * @Date: 2017-11-23 15:43:26 
  * @Last Modified by: david
- * @Last Modified time: 2018-01-06 11:12:10
+ * @Last Modified time: 2018-01-06 12:04:10
  */
 
 /**
@@ -18,7 +18,8 @@ window.onpageshow = function (event) {
 /**
  * @function validate():void 
  * @param {string} input 
- */x
+ * @description Validates form input data
+ */
 function validate(input) {
     let inputValue = document.getElementById(input).value;
     let inputDiv = document.getElementById(input);
@@ -30,7 +31,8 @@ function validate(input) {
 
     specialChars = specialCharacters(inputValue);
 
-    if ((inputValue.length < 6) || (specialChars == true)) {
+    if ((inputValue.length < 6) || (specialChars == true) ||
+        (input == 'password' && !passwordStrength())) {
         inputAlertString = "Invalid " + input;
         inputDiv.style = errorStyle;
     } else {
@@ -55,19 +57,17 @@ function checkAllInputs(inputId) {
 
     for (i = 0; i < input.length; ++i) {
         if ((input[i].value.length < 6) || (specialCharacters(input[i].value))) {
-            // Do passwords match
-            if (input.value == "password_confirm") {
-                if (!matchPassword()) {
-                    return false;
-                }
-            }
-            // Is password complex
-            if (input.value == "password") {
-                if (!passwordStrength()) {
-                    return false
-                }
-            }
             return false;
+        } 
+        else if (input[i].name == "password_confirm") {
+            if (!matchPassword()) {
+                return false;
+            }
+        } 
+        else if (input[i].name == "password") {
+            if (!passwordStrength()) {
+                return false
+            }
         }
     }
     return true;
@@ -75,7 +75,7 @@ function checkAllInputs(inputId) {
 
 /**
  * @function toggleButtonState():void
- * @param {string} state 
+ * @param {boolean} state 
  */
 function toggleButtonState(state) {
     document.getElementById('submit').disabled = state;
@@ -115,6 +115,6 @@ function passwordStrength() {
     var hasUpperCase = /[A-Z]/.test(password);
     var hasLowerCase = /[a-z]/.test(password);
     var hasNumbers = /\d/.test(password);
-    if ( (hasUpperCase + hasLowerCase + hasNumbers) < 2) { return false }
+    if ( (hasUpperCase + hasLowerCase + hasNumbers) < 3) { return false }
     return true;
 }

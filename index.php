@@ -152,7 +152,9 @@ if(empty($mypassword)){
                     </div>
                     <div class="card-footer">
                         <div id="demo" class="collapse">
-                            <small class="form-text text-muted">Minimum length is 6. Use alpha-numeric characters only. No symbols, punctuation or whitespace.</small>
+                            <small class="form-text text-muted">
+                                <b>Username</b><br> Minimum length is 6. Use alpha-numeric characters only. No symbols.<br><br>
+                                <b>Password</b><br> Minimum length is 6. Must contain at least: 1 uppercase char, 1 number. No symbols.</small>
                         </div>
                     </div>
                 </div>
