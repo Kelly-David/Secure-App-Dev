@@ -3,7 +3,7 @@
  * @Author: David Kelly 
  * @Date: 2017-11-25 13:40:24 
  * @Last Modified by: david
- * @Last Modified time: 2017-11-27 14:02:17
+ * @Last Modified time: 2018-01-06 12:17:22
  */
 
 // Protect partial from being viewed individually
@@ -27,7 +27,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif(strlen($mypassword) < 6) {
     // Password length error
     $mypassword_err = "Password must have atleast 6 characters.";
-    }
+    } elseif(!preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/', $mypassword))
+    // Password format error
+    $password_err = "Password must be in the correct format.";
 
     // Validate password_confirm
    if(empty($mypassword_confirm)){

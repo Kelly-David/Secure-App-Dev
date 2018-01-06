@@ -29,6 +29,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $username_err = "Username error - please enter a valid username.";
 
+    } elseif(!preg_match('/^[a-zA-Z]\w{6,}$/', $myusername)) {
+    
+        $username_err = "Username format error - please enter a valid username.";
+        
     } else {
 
     // Prepare a select statement
