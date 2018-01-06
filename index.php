@@ -107,7 +107,7 @@ if(empty($mypassword)){
 <html>
 
 <head>
- <?php include("styles.php"); ?> 
+ <?php include("partials/styles.php"); ?> 
     <title>Register</title>
 </head>
 
@@ -158,7 +158,7 @@ if(empty($mypassword)){
                 </div>
             </div>
         </div>
-        <?php include("js.php"); ?> 
+        <?php include("partials/js.php"); ?> 
     </div>
 </body>
 

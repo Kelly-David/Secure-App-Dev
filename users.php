@@ -3,7 +3,7 @@
  * @Author: David Kelly 
  * @Date: 2017-11-25 11:50:26 
  * @Last Modified by: david
- * @Last Modified time: 2017-11-27 13:53:54
+ * @Last Modified time: 2018-01-06 10:46:35
  */
 require_once("config.php");
 require_once("utility.php");
@@ -21,11 +21,7 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
  <html>
  
  <head>
-     <meta charset="ISO-8859-1">
-     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
-         crossorigin="anonymous">
-     <link rel="stylesheet" href="style.css">
-     <script src="validate.js"></script> 
+    <?php include("partials/styles.php"); ?> 
      <title>Users</title>
  </head>
  
@@ -88,13 +84,7 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
                  </div>
              </div>
          </div>
-         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-             crossorigin="anonymous"></script>
-         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
-             crossorigin="anonymous"></script>
-         <script src="https://use.fontawesome.com/6e3dca925a.js"></script>
-         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
-             crossorigin="anonymous"></script>
+         <?php include("partials/js.php"); ?> 
      </div>
  </body>
  
