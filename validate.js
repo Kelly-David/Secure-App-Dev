@@ -2,7 +2,7 @@
  * @Author: David Kelly 
  * @Date: 2017-11-23 15:43:26 
  * @Last Modified by: david
- * @Last Modified time: 2017-11-27 15:10:19
+ * @Last Modified time: 2018-01-06 10:07:58
  */
 
 window.onpageshow = function (event) {
@@ -11,9 +11,11 @@ window.onpageshow = function (event) {
     }
 };
 
-// validate(string)
+/** Function validate(input): void
+ *  input: string 
+*/ 
 function validate(input) {
-
+    // Grab form data
     let inputValue = document.getElementById(input).value;
     let inputDiv = document.getElementById(input);
     let inputAlertString = "";
