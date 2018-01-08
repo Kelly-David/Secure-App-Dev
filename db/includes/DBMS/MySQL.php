@@ -43,7 +43,7 @@ if( !@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $_DVWA[ 'db_datab
 	dvwaPageReload();
 }
 
-$create_tb = "CREATE TABLE users(
+$create_tb = "CREATE TABLE user(
     id INT NOT NULL AUTO_INCREMENT,
     username VARCHAR(50),
     passcode VARCHAR(200),
@@ -64,7 +64,7 @@ $stripPos = strpos( $baseUrl, 'setup.php' );
 $baseUrl  = substr( $baseUrl, 0, $stripPos ) . 'hackable/users/';
 
 $insert = "INSERT INTO 
-	users (username, passcode) 
+	user (username, passcode) 
 		VALUES ('admin','Password123');";
 if( !mysqli_query($GLOBALS["___mysqli_ston"],  $insert ) ) {
 	dvwaMessagePush( "Data could not be inserted into 'users' table<br />SQL: " . ((is_object($GLOBALS["___mysqli_ston"])) ? mysqli_error($GLOBALS["___mysqli_ston"]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) );
@@ -73,6 +73,7 @@ if( !mysqli_query($GLOBALS["___mysqli_ston"],  $insert ) ) {
 
 // Done
 
-echo("<body><h1>Please <a href='login.php'>login</a></h1></body>" );
+$login = "<a href='login.php'>login</a>";
+header("location: index.php");
 
 ?>
