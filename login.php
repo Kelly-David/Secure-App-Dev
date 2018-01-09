@@ -12,7 +12,7 @@ session_start();
 
 // Initialize variables
 $username = $password = "";
-$username_err = $password_err = $login_err = "";
+$username_err = $password_err = $login_err = $captcha_err = "";
 $auth = false;
 
 // Time
@@ -21,13 +21,12 @@ $mytime = new DateTime();
 $mytime = $mytime->format('Y-m-d H:i:s');
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
-   // username and password sent from form 
-   
-   $myusername = strtoupper(mysqli_real_escape_string($link,$_POST['username']));
-   $mypassword = mysqli_real_escape_string($link,$_POST['password']); 
 
-   debug_to_console( $myusername );
-   debug_to_console( $mypassword );
+    // Check the Captcha
+    if (!isValid()) { $captcha_err = 'Captcha Error!'; }
+
+    $myusername = strtoupper(mysqli_real_escape_string($link,$_POST['username']));
+    $mypassword = mysqli_real_escape_string($link,$_POST['password']); 
    
     // Validate username
     if(empty($myusername)) {
@@ -45,7 +44,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     }
    
     // Check input errors 
-    if(empty($username_err) && empty($password_err)){
+    if(empty($username_err) && empty($password_err) && empty($captcha_err)){
        // Prepare an insert statement
        $sql = "SELECT username, passcode, lastLogin, attempt FROM user WHERE username = ?";
        
@@ -167,24 +166,29 @@ mysqli_close($link);
                                 <small id="passwordAlert" class="form-text text-muted float-right"><?php echo $password_err; ?></small>
                                 
                             </div>
-                            <br>
-                            <small>
-                                <a href="index.php">New user?</a>
-                            </small>
-                            <button type="submit" id="submit" class="btn btn-primary btn-sm float-right" disabled="true"><i class="fa fa-sign-in" aria-hidden="true"></i> Submit</button>
-                        </form>
-                    </div>
-                    <div class="card-footer">
-                        <div id="demo" class="collapse">
-                            <small class="form-text text-muted">
-                                <b>Username</b><br> Minimum length is 6. Use alpha-numeric characters only. No symbols.<br><br>
-                                <b>Password</b><br> Minimum length is 6. Must contain at least: 1 uppercase char, 1 number. No symbols.</small>
+                            <div class="form-group">
+                                <div class="g-recaptcha" data-sitekey="6Lcb6D8UAAAAABLHlCeoqkqOfukRwMdITo9mpenk"></div>
+                                <small id="captchAlert" class="form-text text-muted float-right"><?php echo $captcha_err; ?></small>                                
+                            </div>
+                                <br>
+                                <small>
+                                    <a href="index.php">New user?</a>
+                                </small>
+                                <button type="submit" id="submit" class="btn btn-primary btn-sm float-right" disabled="true"><i class="fa fa-sign-in" aria-hidden="true"></i> Submit</button>
+                            </form>
+                        </div>
+                        <div class="card-footer">
+                            <div id="demo" class="collapse">
+                                <small class="form-text text-muted">
+                                    <b>Username</b><br> Minimum length is 6. Use alpha-numeric characters only. No symbols.<br><br>
+                                    <b>Password</b><br> Minimum length is 6. Must contain at least: 1 uppercase char, 1 number. No symbols.</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <?php include("partials/js.php"); ?> 
+                <?php include("partials/js.php"); ?> 
+                <script src='https://www.google.com/recaptcha/api.js'></script>
     </div>
 </body>
 

@@ -39,7 +39,7 @@ if( isset( $_POST[ 'create_db' ] ) ) {
 
                             <!-- Create db button -->
                             <form action="#" method="post" class="text-center">
-                                <input name="create_db" type="submit" value="Build Database" class="btn btn-primary btn-sm">
+                                <input name="create_db" type="submit" value="Build Database" class="btn btn-info btn-sm">
                             </form>
 
                             <?php echo $login; ?>
