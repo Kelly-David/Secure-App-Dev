@@ -3,7 +3,7 @@
  * @Author: David Kelly 
  * @Date: 2017-11-23 21:14:15 
  * @Last Modified by: david
- * @Last Modified time: 2018-01-09 10:29:33
+ * @Last Modified time: 2018-01-09 10:37:06
  */
 
 
@@ -16,6 +16,10 @@ function debug_to_console( $data ) {
     echo "<script>console.log( 'Debug Objects: " . $output . "' );</script>";
 }
 
+/** Function: Checks ReCaptcha 
+ *  Source: Levit Jun 10 '15 at 7:02 
+ *  Available: https://stackoverflow.com/questions/27274157/new-google-recaptcha-with-checkbox-server-side-php
+*/
 function isValid() 
 {
     try {
