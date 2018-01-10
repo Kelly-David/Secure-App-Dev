@@ -3,8 +3,10 @@
  * @Author: David Kelly 
  * @Date: 2017-11-23 21:14:15 
  * @Last Modified by: david
- * @Last Modified time: 2017-11-24 09:03:53
+ * @Last Modified time: 2018-01-10 11:10:10
  */
+
+   define("SECURE", TRUE);   
 
    define('DB_SERVER', 'localhost:3306');
    define('DB_USERNAME', 'root');
@@ -17,4 +19,5 @@
    if($link === false){
      die("ERROR: Could not connect. " . mysqli_connect_error());
   }
+
 ?>
