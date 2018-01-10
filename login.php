@@ -27,6 +27,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $myusername = strtoupper(mysqli_real_escape_string($link,$_POST['username']));
     $mypassword = mysqli_real_escape_string($link,$_POST['password']); 
+    $usernameout = htmlspecialchars($myusername, ENT_QUOTES);
    
     // Validate username
     if(empty($myusername)) {
@@ -102,15 +103,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                                 echo "Oops! Something went wrong. Please try again later.";                             
                             }
                         }
-                        // Display an error message if password is not valid
-                        $password_err = 'The password you entered was not valid.';
+                        $username_err = 'Username ' . $usernameout . ' and password combination invalid';
                     } else {
                         // Account is blocked
                     }
                 }
             } else{
                 // Display an error message if username doesn't exist
-                $username_err = 'No account found with username ' . $myusername . '.';
+                $username_err = 'No account found with username ' . $usernameout . '.';
             }
         } else{
             echo "Oops! Something went wrong. Please try again later.";

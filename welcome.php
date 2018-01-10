@@ -16,6 +16,7 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
   exit;
 } else {
     $myusername = $_SESSION['username'];
+    $usernameout = htmlspecialchars($myusername, ENT_QUOTES);
     $auth = true;
 }
 ?>
@@ -47,7 +48,7 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
                              <span>
                      </div>
                      <div class="card-body">
-                         <span class="text-info"><?php echo $myusername; ?></span><br>
+                         <span class="text-info"><?php echo $usernameout; ?></span><br>
                          <small class="text-muted">Welcome to the app!</small>
                      </div>
                      <div class="card-footer">
