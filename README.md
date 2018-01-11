@@ -2,6 +2,11 @@
 
 Create an authentication mechanism for a web application using XAMPP, PHP & MySQL. Your authentication mechanism should allow for the following functionality. 
 
+### Setup
+* Clone repository to Applications/XAMPP/xamppfiles/htdocs/c00193216
+* Navigate to localhost/c00193216/setup.php
+* Select 'Build Database' to create the MySQL db and User table
+
 ### Register with the system.
 * The system should allow users to register with the system using a username and password.
 * Complexity rules regarding the password should be enforced.
