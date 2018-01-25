@@ -65,7 +65,7 @@ if ($query->num_rows == 0) {  // New client
 			$differenceInSeconds = strtotime($currentTime) - strtotime($lastLoginAttemptTime);			
 			if((int)$differenceInSeconds <= 300) { // 5 minute lockout
                 // Client not permitted to attempt login
-                // Redirect to register view 
+                // Redirect to register view until lockout expires 
                 header("location: index.php");
 		        die();
 			} else
