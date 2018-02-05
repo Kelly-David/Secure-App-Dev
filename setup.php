@@ -7,7 +7,7 @@ if( isset( $_POST[ 'create_db' ] ) ) {
     $DBMS = 'MySQL';
 	
 	if( $DBMS == 'MySQL' ) {
-		include_once 'db/includes/DBMS/MySQL.php';
+		include_once 'db/mysql.php';
 	}
 	else {
 		dvwaMessagePush( 'ERROR: Invalid database selected. Please review the config file syntax.' );
