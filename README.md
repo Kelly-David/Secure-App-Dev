@@ -1,4 +1,4 @@
-# Secure-App-Dev
+# Secure-App-Dev: Part 2
 
 Create an authentication mechanism for a web application using XAMPP, PHP & MySQL. Your authentication mechanism should allow for the following functionality. 
 
@@ -7,24 +7,21 @@ Create an authentication mechanism for a web application using XAMPP, PHP & MySQ
 * Navigate to localhost/c00193216/setup.php
 * Select 'Build Database' to create the MySQL db and User table
 
-### Register with the system.
-* The system should allow users to register with the system using a username and password.
-* Complexity rules regarding the password should be enforced.
+### Personally Identifiable Information Retention
+No personally identifiable information regarding users should be stored in human readable form in the database.
 
-### On an unsuccessful authentication attempt
-* A generic error message is presented back to the end user outlining that the username (BOB) & password combination cannot be authenticated at the moment. 
-* Reflect the supplied username provided in the above message. Ensure that this reflected parameter in not susceptible to XSS. 
-* Lockout after 3 attempts for 5 minutes.
+### Register
+A user will be required to intially register with the system using a chosen UserId, Password, Email Address and the date of birth. Once registered the user can authenticate.
 
-### On successful authentication 
-* The system should greet the user by their username.
-* Create an active session.
-* Allow for the authenticated user to view some pages (at least two) that an unauthenticated user will not have access to.
-* Allow for the user to logout securely. 
+### Lockout Mechanism
+A lockout mechanism should be in place on the login page on 5 unsuccessfult authentication attempts within 5 minutes.
 
-### Password Change
-* Authenticated users should be capable of changing their password.
-* Complexity rules regarding the password should be enforced.
-* On password change the active session should be expired.
-* The user will have to re-authenticate using new credentials to gain access to the system.
-* No out of band communication mechanism is required to inform the user that their credentials has been updated. 
+### Forgot Password
+If the user cannot remeber their password they should have a 'Forgot Password' functinality to facilitate the end user reset of their password.
+
+### Logging
+The aplication should implememt logging to a text file for the following activities.
+* Successful login attempts
+* Unsuccessful login attempts
+* Password resets
+* Exceptions thrown against the database.
