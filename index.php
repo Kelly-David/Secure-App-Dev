@@ -11,40 +11,44 @@ require_once("utility.php");
 session_start();
 
 // Initialize variables
-$username = $password = "";
-$username_err = $password_err = "";
+$username = $password = $email = $dob = "";
+$username_err = $password_err = $email_err = $dob_err = "";
 $auth = false;
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
    // username and password sent from form 
    
-   $myusername = strtoupper(mysqli_real_escape_string($link,$_POST['username']));
-   $mypassword = mysqli_real_escape_string($link,$_POST['password']); 
+   $username = strtoupper(mysqli_real_escape_string($link,$_POST['username']));
+   $password = mysqli_real_escape_string($link,$_POST['password']); 
+   $email = mysqli_real_escape_string($link,$_POST['email']); 
+   $dob = mysqli_real_escape_string($link,$_POST['dob']); 
 
    // Testing
-   debug_to_console( $myusername );
-   debug_to_console( $mypassword );
+   debug_to_console( $username );
+   debug_to_console( $password );
+   debug_to_console( $email );
+   debug_to_console( $dob );
 
    // Validate username
-   if(empty($myusername)) {
+   if(empty($username)) {
 
     $username_err = "Username error - please enter a valid username.";
 
-    } elseif(!preg_match('/^[a-zA-Z0-9 .]+$/', $myusername) || (strlen($myusername) < 6)) {
+    } elseif(!preg_match('/^[a-zA-Z0-9 .]+$/', $username) || (strlen($username) < 6)) {
     
         $username_err = "Username format error - please enter a valid username.";
         
     } else {
 
     // Prepare a select statement
-    $sql = "SELECT id FROM user WHERE username = ?";
+    $sql = "SELECT email FROM user WHERE email = ?";
     
     if($stmt = mysqli_prepare($link, $sql)){
         // Bind variables to the prepared statement as parameters
-        mysqli_stmt_bind_param($stmt, "s", $param_username);
+        mysqli_stmt_bind_param($stmt, "s", $param_email);
         
         // Set parameters
-        $param_username = $myusername;
+        $param_email = $email;
         
         // Attempt to execute the prepared statement
         if(mysqli_stmt_execute($stmt)){
@@ -52,9 +56,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             mysqli_stmt_store_result($stmt);
             
             if(mysqli_stmt_num_rows($stmt) == 1){
-                $username_err = "Username registered. Re-enter or <a href='login.php'>login</a>.";
-            } 
 
+                mysqli_stmt_bind_result($stmt, $hashed_email);
+
+                if(mysqli_stmt_fetch($stmt)) {
+                    if(password_verify($email, $hashed_email)) {
+                    $username_err = "Email registered in the system. Re-enter or <a href='login.php'>login</a>."; 
+                    }                       
+                }
+            } 
         } else{
             echo "Oops! Something went wrong. Please try again later.";
         }
@@ -64,38 +74,40 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // Validate password
-if(empty($mypassword)){
+if(empty($password)){
     // No password
     $password_err = "Please enter a password.";  
-} elseif(strlen($mypassword) < 6) {
+} elseif(strlen($password) < 6) {
     // Password length error
     $password_err = "Password must have at least 6 characters.";
-} elseif(!preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/', $mypassword))
+} elseif(!preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/', $password))
     // Password format error
     $password_err = "Password must be in the correct format.";
    
     // Check input errors before inserting in database
     if(empty($username_err) && empty($password_err)){
        // Prepare an insert statement
-       $sql = "INSERT INTO user (username, passcode, state) VALUES (?, ?, ?)";
+       $sql = "INSERT INTO user (username, passcode, email, dob, state) VALUES (?, ?, ?, ?, ?)";
        
        if($stmt = mysqli_prepare($link, $sql)){
            // Bind variables to the prepared statement as parameters
-           mysqli_stmt_bind_param($stmt, "sss", $param_username, $param_password, $param_state );
+           mysqli_stmt_bind_param($stmt, "sssss", $param_username, $param_password, $param_email, $param_dob, $param_state );
            // Set parameters
-           $param_username = $myusername;
            $options = [
             'cost' => 11,
             'salt' => mcrypt_create_iv(22, MCRYPT_DEV_URANDOM),
             ];
-           $param_password = password_hash($mypassword, PASSWORD_BCRYPT, $options);
-           $param_state = 1;
+            $param_username = password_hash($username, PASSWORD_BCRYPT, $options);
+            $param_password = password_hash($password, PASSWORD_BCRYPT, $options);
+            $param_email = password_hash($email, PASSWORD_BCRYPT, $options);
+            $param_dob = password_hash($dob, PASSWORD_BCRYPT, $options);
+            $param_state = 1;
            
            // Attempt to execute the prepared statement
            if(mysqli_stmt_execute($stmt)){
                // Redirect to welcome page
                session_start();
-               $_SESSION['username'] = $myusername;  
+               $_SESSION['username'] = $username;  
                header("location: welcome.php");
             } else{
                 echo "Something went wrong. Please try again later.";
@@ -143,6 +155,16 @@ if(empty($mypassword)){
                                 <small id="usernameAlert" class="form-text text-muted float-right"><?php echo $username_err; ?></small>
                             </div>
                             <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control form-control-sm" id="email" name="email" placeholder="Enter an email">
+                                <small id="emailAlert" class="form-text text-muted float-right"><?php echo $email_err; ?></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="dob">Date of Birth</label>
+                                <input type="date" class="form-control form-control-sm" id="dob" name="dob" placeholder="Enter dob">
+                                <small id="dobAlert" class="form-text text-muted float-right"><?php echo $dob_err; ?></small>
+                            </div>
+                            <div class="form-group">
                                 <label for="password">Password</label>
                                 <input type="password" class="form-control form-control-sm" id="password" name="password" placeholder="Enter a password"
                                     onkeyup="validate('password');">
@@ -170,5 +192,4 @@ if(empty($mypassword)){
         <?php include("partials/js.php"); ?> 
     </div>
 </body>
-
 </html>

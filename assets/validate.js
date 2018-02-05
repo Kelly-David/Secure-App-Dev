@@ -2,7 +2,7 @@
  * @Author: David Kelly 
  * @Date: 2017-11-23 15:43:26 
  * @Last Modified by: david
- * @Last Modified time: 2018-01-09 10:27:30
+ * @Last Modified time: 2018-02-05 14:50:10
  */
 
 /**
@@ -53,23 +53,25 @@ function validate(input) {
  */
 function checkAllInputs(inputId) {
 
-    let input = document.getElementsByTagName('input');
+    // let input = document.getElementsByTagName('input');
 
-    for (i = 0; i < input.length; ++i) {
-        if ((input[i].value.length < 6) || (specialCharacters(input[i].value))) {
-            return false;
-        } 
-        else if (input[i].name == "password_confirm") {
-            if (!matchPassword()) {
-                return false;
-            }
-        } 
-        else if (input[i].name == "password") {
-            if (!passwordStrength()) {
-                return false
-            }
-        }
-    }
+    // for (i = 0; i < input.length; ++i) {
+    //     if (input[i].name != "email" || input[i].name != "dob") {
+    //         if ((input[i].value.length < 6) || (specialCharacters(input[i].value))) {
+    //             return false;
+    //         }
+    //         else if (input[i].name == "password_confirm") {
+    //             if (!matchPassword()) {
+    //                 return false;
+    //             }
+    //         }
+    //         else if (input[i].name == "password") {
+    //             if (!passwordStrength()) {
+    //                 return false
+    //             }
+    //         }
+    //     }
+    // }
     return true;
 }
 
@@ -115,6 +117,6 @@ function passwordStrength() {
     var hasUpperCase = /[A-Z]/.test(password);
     var hasLowerCase = /[a-z]/.test(password);
     var hasNumbers = /\d/.test(password);
-    if ( (hasUpperCase + hasLowerCase + hasNumbers) < 3) { return false }
+    if ((hasUpperCase + hasLowerCase + hasNumbers) < 3) { return false }
     return true;
 }
