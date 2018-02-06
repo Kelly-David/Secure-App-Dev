@@ -3,7 +3,7 @@
  * @Date: 2017-11-23 15:43:44 
  * @Last Modified by:   david 
  * @Last Modified time: 2017-11-23 15:43:44 
- * @Description: User Registration. User enters username and password to create an account.
+ * @Description: User Registration. User enters fullname and password to create an account.
 -->
 <?php
 require_once("config.php");
@@ -11,33 +11,29 @@ require_once("utility.php");
 session_start();
 
 // Initialize variables
-$username = $password = $email = $dob = "";
-$username_err = $password_err = $email_err = $dob_err = "";
+$fullname = $password = $email = $dob = "";
+$fullname_err = $password_err = $email_err = $dob_err = "";
 $auth = false;
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
-   // username and password sent from form 
-   
-   $username = strtoupper(mysqli_real_escape_string($link,$_POST['username']));
+
+   // Form params
+   $fullname = mysqli_real_escape_string($link,$_POST['fullname']);
    $password = mysqli_real_escape_string($link,$_POST['password']); 
    $email = mysqli_real_escape_string($link,$_POST['email']); 
    $dob = mysqli_real_escape_string($link,$_POST['dob']); 
 
    // Testing
-   debug_to_console( $username );
+   debug_to_console( $fullname );
    debug_to_console( $password );
    debug_to_console( $email );
    debug_to_console( $dob );
 
-   // Validate username
-   if(empty($username)) {
+   // Validate email
+   if(empty($email)) {
 
-    $username_err = "Username error - please enter a valid username.";
+    $email_err = "Email error - please enter a valid email.";
 
-    } elseif(!preg_match('/^[a-zA-Z0-9 .]+$/', $username) || (strlen($username) < 6)) {
-    
-        $username_err = "Username format error - please enter a valid username.";
-        
     } else {
 
     // Prepare a select statement
@@ -47,21 +43,23 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         // Bind variables to the prepared statement as parameters
         mysqli_stmt_bind_param($stmt, "s", $param_email);
         
-        // Set parameters
-        $param_email = $email;
+        // Salt and hash the email to query the database
+        $param_email = password_hash($email, PASSWORD_BCRYPT);
+        // Debugging
+        debug_to_console( $param_email );
         
         // Attempt to execute the prepared statement
         if(mysqli_stmt_execute($stmt)){
             /* store result */
             mysqli_stmt_store_result($stmt);
-            
             if(mysqli_stmt_num_rows($stmt) == 1){
-
                 mysqli_stmt_bind_result($stmt, $hashed_email);
-
                 if(mysqli_stmt_fetch($stmt)) {
-                    if(password_verify($email, $hashed_email)) {
-                    $username_err = "Email registered in the system. Re-enter or <a href='login.php'>login</a>."; 
+                    //Debugging
+                    debug_to_console( $hashed_email );
+     
+                    if($param_email == $hashed_email) {
+                    $fullname_err = "Email registered in the system. Re-enter or <a href='login.php'>login</a>."; 
                     }                       
                 }
             } 
@@ -85,21 +83,21 @@ if(empty($password)){
     $password_err = "Password must be in the correct format.";
    
     // Check input errors before inserting in database
-    if(empty($username_err) && empty($password_err)){
+    if(empty($fullname_err) && empty($password_err)){
        // Prepare an insert statement
-       $sql = "INSERT INTO user (username, passcode, email, dob, state) VALUES (?, ?, ?, ?, ?)";
+       $sql = "INSERT INTO user (fullname, passcode, email, dob, state) VALUES (?, ?, ?, ?, ?)";
        
        if($stmt = mysqli_prepare($link, $sql)){
            // Bind variables to the prepared statement as parameters
-           mysqli_stmt_bind_param($stmt, "sssss", $param_username, $param_password, $param_email, $param_dob, $param_state );
+           mysqli_stmt_bind_param($stmt, "sssss", $param_fullname, $param_password, $param_email, $param_dob, $param_state );
            // Set parameters
            $options = [
             'cost' => 11,
             'salt' => mcrypt_create_iv(22, MCRYPT_DEV_URANDOM),
             ];
-            $param_username = password_hash($username, PASSWORD_BCRYPT, $options);
+            $param_fullname = password_hash($fullname, PASSWORD_BCRYPT, $options);
             $param_password = password_hash($password, PASSWORD_BCRYPT, $options);
-            $param_email = password_hash($email, PASSWORD_BCRYPT, $options);
+            $param_email = password_hash($email, PASSWORD_BCRYPT);
             $param_dob = password_hash($dob, PASSWORD_BCRYPT, $options);
             $param_state = 1;
            
@@ -107,7 +105,7 @@ if(empty($password)){
            if(mysqli_stmt_execute($stmt)){
                // Redirect to welcome page
                session_start();
-               $_SESSION['username'] = $username;  
+               $_SESSION['username'] = $fullname;  
                header("location: welcome.php");
             } else{
                 echo "Something went wrong. Please try again later.";
@@ -150,23 +148,23 @@ if(empty($password)){
                     <div class="card-body">
                         <form action="" method="post" autocomplete="off" >
                             <div class="form-group">
-                                <label for="username">Username</label>
-                                <input type="text" class="form-control form-control-sm" id="username" name="username" placeholder="Enter username" required>
-                                <small id="usernameAlert" class="form-text text-muted float-right"><?php echo $username_err; ?></small>
+                                <label for="fullname">Name</label>
+                                <input type="text" class="form-control form-control-sm" id="fullname" name="fullname" placeholder="Enter fullname" >
+                                <small id="fullnameAlert" class="form-text text-muted float-right"><?php echo $fullname_err; ?></small>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input type="email" class="form-control form-control-sm" id="email" name="email" placeholder="Enter an email" required>
+                                <input type="email" class="form-control form-control-sm" id="email" name="email" placeholder="Enter an email" >
                                 <small id="emailAlert" class="form-text text-muted float-right"><?php echo $email_err; ?></small>
                             </div>
                             <div class="form-group">
                                 <label for="dob">Date of Birth</label>
-                                <input type="date" class="form-control form-control-sm" id="dob" name="dob" placeholder="Enter dob" required>
+                                <input type="date" class="form-control form-control-sm" id="dob" name="dob" placeholder="Enter dob" >
                                 <small id="dobAlert" class="form-text text-muted float-right"><?php echo $dob_err; ?></small>
                             </div>
                             <div class="form-group">
                                 <label for="password">Password</label>
-                                <input type="password" class="form-control form-control-sm" id="password" name="password" placeholder="Enter a password" required>
+                                <input type="password" class="form-control form-control-sm" id="password" name="password" placeholder="Enter a password" >
                                 <span>
                                     <small id="passwordAlert" class="form-text text-muted float-right"><?php echo $password_err; ?></small>
                                 </span>
@@ -175,13 +173,15 @@ if(empty($password)){
                             <small>
                                 <a href="login.php">Already registered?</a>
                             </small>
-                            <button type="submit" id="submit" class="btn btn-primary btn-sm float-right" disabled="true"><i class="fa fa-sign-in" aria-hidden="true"></i> Submit</button>
+                            <button type="submit" id="submit" class="btn btn-primary btn-sm float-right"><i class="fa fa-sign-in" aria-hidden="true"></i> Submit</button>
                         </form>
                     </div>
                     <div class="card-footer">
                         <div id="demo" class="collapse">
                             <small class="form-text text-muted">
-                                <b>Username</b><br> Minimum length is 6. Use alpha-numeric characters only. No symbols.<br><br>
+                                <b>Name</b><br> Minimum length is 6. Use alpha-numeric characters only. No symbols.<br><br>
+                                <b>Email</b><br> Enter a valid email address.</small>
+                                <b>DOB</b><br> Specify date of birth</small>
                                 <b>Password</b><br> Minimum length is 6. Must contain at least: 1 uppercase char, 1 number. No symbols.</small>
                         </div>
                     </div>

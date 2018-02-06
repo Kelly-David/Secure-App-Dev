@@ -47,7 +47,7 @@ if( !@((bool)mysqli_query($link, "USE " . $DB_Param['database'])) ) {
 // Create the user table
 $sql_create_tb = "CREATE TABLE user(
     id INT NOT NULL AUTO_INCREMENT,
-    username VARCHAR(50),
+    fullname VARCHAR(50),
     passcode VARCHAR(200),
     email VARCHAR(200),
     dob VARCHAR(10),

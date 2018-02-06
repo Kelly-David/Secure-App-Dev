@@ -3,7 +3,7 @@
  * @Author: David Kelly 
  * @Date: 2017-11-23 21:14:15 
  * @Last Modified by: david
- * @Last Modified time: 2018-01-09 10:37:06
+ * @Last Modified time: 2018-02-06 10:57:39
  */
 
 
@@ -44,6 +44,20 @@ function isValid()
     catch (Exception $e) {
         return null;
     }
+}
+
+function getSalt($param) {
+    $secure_param = "";
+
+    $param = md5($param);
+    $param = substr($param,0,10);
+    $secure_param = strrev($param);
+
+    return $secure_param;
+}
+
+function getParmaSalt($param) {
+    return strrev(substr(md5($param),0,10));
 }
 
 ?>
