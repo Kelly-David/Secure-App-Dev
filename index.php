@@ -151,23 +151,22 @@ if(empty($password)){
                         <form action="" method="post" autocomplete="off" >
                             <div class="form-group">
                                 <label for="username">Username</label>
-                                <input type="text" class="form-control form-control-sm" id="username" name="username" placeholder="Enter username" onkeyup="validate('username');">
+                                <input type="text" class="form-control form-control-sm" id="username" name="username" placeholder="Enter username" required>
                                 <small id="usernameAlert" class="form-text text-muted float-right"><?php echo $username_err; ?></small>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input type="email" class="form-control form-control-sm" id="email" name="email" placeholder="Enter an email">
+                                <input type="email" class="form-control form-control-sm" id="email" name="email" placeholder="Enter an email" required>
                                 <small id="emailAlert" class="form-text text-muted float-right"><?php echo $email_err; ?></small>
                             </div>
                             <div class="form-group">
                                 <label for="dob">Date of Birth</label>
-                                <input type="date" class="form-control form-control-sm" id="dob" name="dob" placeholder="Enter dob">
+                                <input type="date" class="form-control form-control-sm" id="dob" name="dob" placeholder="Enter dob" required>
                                 <small id="dobAlert" class="form-text text-muted float-right"><?php echo $dob_err; ?></small>
                             </div>
                             <div class="form-group">
                                 <label for="password">Password</label>
-                                <input type="password" class="form-control form-control-sm" id="password" name="password" placeholder="Enter a password"
-                                    onkeyup="validate('password');">
+                                <input type="password" class="form-control form-control-sm" id="password" name="password" placeholder="Enter a password" required>
                                 <span>
                                     <small id="passwordAlert" class="form-text text-muted float-right"><?php echo $password_err; ?></small>
                                 </span>
